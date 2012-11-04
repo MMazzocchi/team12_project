@@ -7,6 +7,7 @@ var turnInProgress = false;
 
 function pageLoad() {
 	// set up canvas
+        render();
 
 	// link new game button to new game function
 	document.getElementById("newGame").onclick = newGame;
