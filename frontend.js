@@ -27,6 +27,23 @@ function render() {
 
     drawPayoutTable(ctx);
     drawScore(ctx);
+
+    drawHand(ctx);
+}
+
+function drawHand(ctx) {
+
+    var x=150;
+    var y=300;
+
+    if(hand.length>0 && hand.length<5) {
+        drawHand(ctx);
+    } else {
+        $.each(hand, function(i,v) {
+            drawCard(v,x,y,ctx);
+            x+=70;
+        });
+    }
 }
 
 function drawScore(ctx) {

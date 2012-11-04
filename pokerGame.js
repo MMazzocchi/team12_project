@@ -37,6 +37,7 @@ function nextTurn() {
 		hand.push(deck[i]);
 	}
 	updateDisplay();
+        render();
 }
 
 function doTurn() {
