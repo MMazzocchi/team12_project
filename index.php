@@ -9,6 +9,10 @@
     </head>
     <body>
         <div class=content>
+        	<button id="newGame">New Game</button>
+        	<button id="1" name="betOne">Bet One</button>
+        	<button id="5" name="betMax">Bet Max</button>
+        	<button id="draw">Draw</button>
         </div>
     </body>
 </html>
