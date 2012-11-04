@@ -40,7 +40,7 @@ function nextTurn() {
 
 function doTurn() {
 	// get cards to discard/hold
-	var discards = [0];
+	var discards = [];
 	discards.sort();
 	discards.reverse();
 
@@ -49,7 +49,7 @@ function doTurn() {
 	}
 
 	// draw new cards
-	for (var i = 0; i < 5-discards.length; i++) {
+	for (var i = 0; i < discards.length; i++) {
 		hand.push(deck[i+5]);
 	}
 	payout(checkWin());
@@ -60,7 +60,6 @@ function setBet() {
 	if (!turnInProgress) {
 		bet = this.id;
 	}
-	//updateDisplay();
 }
 
 function updateDisplay() {
@@ -68,7 +67,7 @@ function updateDisplay() {
 	for (var i = 0; i < hand.length; i++) {
 		console.log(hand[i].value + " of " + hand[i].suite);
 	}
-	console.log(bet);
+	console.log("");
 }
 
 function draw() {
