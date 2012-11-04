@@ -25,11 +25,24 @@ function render() {
     ctx.font = "40pt Calibri";
     ctx.strokeText("Team 12 Video Poker", 150, 75);
 
-    drawPayoutTable(1, ctx);
+    drawPayoutTable(ctx);
+    drawScore(ctx);
 }
 
-function drawPayoutTable(myBet, ctx) {
-    var WinningHand = [
+function drawScore(ctx) {
+    ctx.strokeStyle = "#FFB905";
+    ctx.lineWidth = 2;
+    ctx.font = "16pt Calibri";
+    ctx.strokeText("Your Credits:", 705, 155);
+    ctx.strokeStyle = "#E43D1A";
+    ctx.lineWidth = 2;
+    ctx.font = "25pt Calibri";
+    ctx.strokeText(credits, 740, 192);
+
+}
+
+function drawPayoutTable(ctx) {
+    var winningHands = [
         "Royal Flush",
         "Straight Flush",
         "Four Aces",
@@ -42,14 +55,14 @@ function drawPayoutTable(myBet, ctx) {
         "Jacks Or Better"
     ];
 
-    var x=75;
+    var x=60;
     var y=100;
 
     ctx.strokeStyle = "#FFFFFF";
     ctx.lineWidth = 2;
     ctx.font = "10pt Calibri";
 
-    $.each(WinningHand, function(i,v) {
+    $.each(winningHands, function(i,v) {
         ctx.lineWidth = 2;
         ctx.strokeRect(x,y,200,15);
         ctx.strokeRect(x+200,y,200,15);
