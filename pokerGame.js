@@ -31,11 +31,14 @@ function newGame() {
 
 function nextTurn() {
 	deck.shuffle();
+
 	// draw new cards
 	hand = [];
 	for (var i = 0; i < 5; i++) {
 		hand.push(deck[i]);
 	}
+
+	credits -= bet;
 	updateDebug();
     render();
 }
@@ -194,16 +197,16 @@ function checkWin() {
 
 	// payout
 	console.log(handResult);
-	if (handResult != WinningHand.NOWIN) {
-		payout(handResult);
-	}
+	payout(handResult);
 }
 
 function payout(index) {
 	// payout according to hand
-	var payouts = [250, 150, 100, 50, 10, 5, 4, 3, 2, 1];
+	var payouts = [250, 150, 100, 50, 10, 5, 4, 3, 2, 1, 0];
 
 	credits += bet * payouts[index];
+	console.log(credits);
+	console.log(payouts[index]);
 }
 
 function Card(suite, value) {
