@@ -77,13 +77,15 @@ function updateDebug() {
 
 // draw button clicked, advance turn
 function draw() {
-	if(turnInProgress) {
-		doTurn();
-	} else {
-		nextTurn();
-	}
+	if (credits >= 0) {
+		if(turnInProgress) {
+			doTurn();
+		} else if (credits > 0) {
+			nextTurn();
+		}
 
-	turnInProgress = !turnInProgress;
+		turnInProgress = !turnInProgress;
+	}
 }
 
 function checkWin() {
