@@ -141,6 +141,6 @@ function drawCard(myCard, x, y, ctx) {
         }
     };
     img.id = name;
-    img.src = "cards/new/"+name;
+    img.src = "cards/"+name;
 
 }
