@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--created by Henry Kernan 2012-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="style.css"
+	type="text/css" />
+	
+	<script language="JavaScript" src="">
+	</script>
+	
+	<title>Texas Hold'em</title>
+</head>
+
+<body>
+<h1>Texas Hold'em</h1>
+<h2>A game of luck and skill</h2>
+<div id="content">
+<div id="enterName">
+	<label>Enter your name to play: </label>
+	<input type="text" name="player_name" maxlength="50" value="Player1" onClick="eraseName()"/>
+</div>
+<div id="gameCanvas">
+<canvas id="texasGame">
+
+</canvas>
+</div>
+<div id="center">
+<command id="showGame" onClick="showGame()">
+	<input type="button" id="newGame" value="Start a New Game!" onClick="showGame()"/>
+</command>
+</div>
+<div id="scoreOutput">
+<output>
+<label>Your current score is: </label>
+</output>
+</div>
+</div>
+<footer>
+<label>Feel you've practiced enough? Play other Texas Hold 'Em games online!<label>
+ <p><a href="http://www.pogo.com/games/no-limit-texas-holdem-poker">Pogo.com Texas Hold 'Em</a></p>
+<p><a href="load_airplane.html">Are you a charter company with a fleet?</a></p>
+</footer>
+</body>
+</html>
