@@ -3,27 +3,27 @@
 <!--modified by Max Mazzocchi 2012-->
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
+        <title>Texas Hold'em</title>
+
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="style.css"
-	type="text/css" />
+	<link rel="stylesheet" href="style.css" type="text/css" />
 
         <script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
-        <script src="frontend.js" type="text/javascript"></script>
         <script src="pokerGame.js" type="text/javascript"></script>
-	
-	
-	<title>Texas Hold'em</title>
-    </head>
+        <script src="frontend.js" type="text/javascript"></script>
 
+    </head>
 <body>
     <h1>Texas Hold'em</h1>
     <h2>A game of luck and skill</h2>
-    <div id="content">
+    <div id=content>
         <div id="enterName">
 	    <label>Enter your name to play: </label>
-	    <input type="text" name="player_name" maxlength="50" value="Player1" onClick="eraseName()"/>
+	    <input type="text" name="player_name" maxlength="50" value="Player1" />
         </div>
-        <canvas id="myCanvas" width=900 height=500></canvas>
+        <div class=content>
+        <canvas id="myCanvas" width="900" height="500" />
+        </div>
         <div id="center">
                 <button id="newGame">New Game</button>
                 <button id="1" name="betOne">Bet One</button>

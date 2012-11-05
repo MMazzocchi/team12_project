@@ -37,11 +37,6 @@ body{
 	border: 10px;
 }
 
-#myCanvas {
-        width: 900px;
-        height: 500px;
-}
-
 h1{
 	border: 2px solid #888888;
 	border-radius:40px;

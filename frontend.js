@@ -8,12 +8,10 @@ function initCanvas() {
 function selectCard(e) {
 
     if(turnInProgress) {
-//        console.log(e);
-        if((e.layerY >= 300 && e.layerY <= 396) && (e.layerX >= 150 && e.layerX <= 500)) {
-            var i = ((e.layerX-150)/70);
+        if((e.layerY >= 655 && e.layerY <= 755) && (e.layerX >= 425 && e.layerX <= 775)) {
+            var i = ((e.layerX-425)/70);
             i = i-(i%1);
             hand[i].selected = !hand[i].selected;
-            console.log(i+": "+hand[i].selected);
             render();
         }
 
