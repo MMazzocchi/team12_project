@@ -27,8 +27,21 @@ function render() {
 
     drawPayoutTable(ctx);
     drawScore(ctx);
+    drawBet(ctx);
 
     drawHand(ctx);
+}
+
+function drawBet(ctx) {
+    ctx.strokeStyle = "#FFB905";
+    ctx.lineWidth = 2;
+    ctx.font = "16pt Calibri";
+    ctx.strokeText("Current Bet:", 705, 250);
+    ctx.strokeStyle = "#E43D1A";
+    ctx.lineWidth = 2;
+    ctx.font = "25pt Calibri";
+    ctx.strokeText(bet, 762, 297);
+
 }
 
 function drawHand(ctx) {
