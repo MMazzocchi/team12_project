@@ -107,7 +107,11 @@ function drawPayoutTable(ctx) {
         ctx.lineWidth = 1;
         ctx.strokeText(v[0],x+2,y+12);
         ctx.strokeText(v[1],x+202,y+12);
-        ctx.strokeText((bet*v[1]),x+402,y+12);
+        if(bet != "--") {
+            ctx.strokeText((bet*v[1]),x+402,y+12);
+        }else{
+            ctx.strokeText("------",x+402,y+12);
+        }
         y+=15;
     });
 }
