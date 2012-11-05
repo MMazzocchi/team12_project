@@ -49,14 +49,10 @@ function drawHand(ctx) {
     var x=150;
     var y=300;
 
-    if(hand.length>0 && hand.length<5) {
-        drawHand(ctx);
-    } else {
         $.each(hand, function(i,v) {
             drawCard(v,x,y,ctx);
             x+=70;
         });
-    }
 }
 
 function drawScore(ctx) {
@@ -106,6 +102,14 @@ function drawPayoutTable(ctx) {
 }
 
 function drawCard(myCard, x, y, ctx) {
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.lineWidth = 2;
+    ctx.font = "10pt Calibri";
+    ctx.strokeRect(x,y,70,96);
+
+    ctx.strokeText(myCard.value,x+3,y+15);
+    ctx.strokeText(myCard.suite,x+3,y+33);
+
     var name = "";
     name=myCard.value + "_" + myCard.suite + ".png";
     var img = document.createElement('img');
@@ -113,4 +117,5 @@ function drawCard(myCard, x, y, ctx) {
     img.src = "cards/new/"+name;
 
     ctx.drawImage(img, x, y);
+    console.log("Card drawn: "+name);
 }

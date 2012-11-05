@@ -225,8 +225,15 @@ function createDeck() {
 		for (var j = 0; j < cardValues.length; j++) {
 			var card = new Card(suites[i], cardValues[j]);
 			deck.push(card);
+
+                        var name = "";
+                        name=card.value + "_" + card.suite + ".png";
+                        var img = document.createElement('img');
+                        img.id = name;
+                        img.src = "cards/new/"+name;
 		}
 	}
+
 }
 
 // credit: http://stackoverflow.com/questions/2450954/how-to-randomize-a-javascript-array
