@@ -1,13 +1,13 @@
 window.onload = pageLoad;
 var deck = [];
 var hand = [];
-var bet = 1;
-var credits = 200;
+var bet = "--";
+var credits = "------";
 var turnInProgress = false;
 
 function pageLoad() {
 	// set up canvas
-    render();
+        initCanvas();
 
 	// link new game button to new game function
 	document.getElementById("newGame").onclick = newGame;
@@ -27,6 +27,8 @@ function newGame() {
 	credits = 200;
 	bet = 1;
 	turnInProgress = false;
+        hand=[];
+        render();
 }
 
 function nextTurn() {
@@ -35,17 +37,26 @@ function nextTurn() {
 	// draw new cards
 	hand = [];
 	for (var i = 0; i < 5; i++) {
+                deck[i].selected = false;
 		hand.push(deck[i]);
 	}
 
 	credits -= bet;
 	updateDebug();
-    render();
 }
 
 function doTurn() {
 	// get cards to discard/hold
-	var discards = [];
+//	var discards = [];
+        var count = 0;
+
+        for(var i = 0; i < hand.length; i++) {
+            if(hand[i].selected) {
+                hand[i].selected=false;
+                hand[i]=deck[i+5];
+            }
+        }
+/*
 	discards.sort();
 	discards.reverse();
 
@@ -54,17 +65,22 @@ function doTurn() {
 	}
 
 	// draw new cards
-	for (var i = 0; i < discards.length; i++) {
+	for (var i = 0; i < count; i++) {
 		hand.push(deck[i+5]);
 	}
+*/
 	checkWin();
 	updateDebug();
+
+        render();
 }
 
 function setBet() {
 	if (!turnInProgress) {
 		bet = this.id;
 	}
+
+        render();
 }
 
 // debugging purposes only
@@ -84,6 +100,7 @@ function draw() {
 	}
 
 	turnInProgress = !turnInProgress;
+        render();
 }
 
 function checkWin() {
@@ -213,6 +230,7 @@ function Card(suite, value) {
 	// card class
 	this.suite = suite;
 	this.value = value;
+        this.selected = false;
 }
 
 function createDeck() {

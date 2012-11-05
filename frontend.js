@@ -1,13 +1,24 @@
-/*var c=document.getElementById("myCanvas");
-var ctx=c.getContext("2d");
-ctx.fillStyle="#005500";
-ctx.strokeRect(0,0,900,500);
+function initCanvas() {
+    var canvas = $('canvas');
+    canvas.click(function(e) { selectCard(e); });
 
-var img = document.createElement('img');
-img.src="cards/1.png";
+    render();
+}
 
-ctx.drawImage(img, 100, 100); 
-*/
+function selectCard(e) {
+
+    if(turnInProgress) {
+//        console.log(e);
+        if((e.layerY >= 300 && e.layerY <= 396) && (e.layerX >= 150 && e.layerX <= 500)) {
+            var i = ((e.layerX-150)/70);
+            i = i-(i%1);
+            hand[i].selected = !hand[i].selected;
+            console.log(i+": "+hand[i].selected);
+            render();
+        }
+
+    }
+}
 
 function render() {
     var ctx = $('canvas')[0].getContext('2d');
@@ -107,15 +118,25 @@ function drawCard(myCard, x, y, ctx) {
     ctx.font = "10pt Calibri";
     ctx.strokeRect(x,y,70,96);
 
-    ctx.strokeText(myCard.value,x+3,y+15);
-    ctx.strokeText(myCard.suite,x+3,y+33);
+//    ctx.strokeText(myCard.value,x+3,y+15);
+//    ctx.strokeText(myCard.suite,x+3,y+33);
 
     var name = "";
     name=myCard.value + "_" + myCard.suite + ".png";
     var img = document.createElement('img');
+    img.onload = function() {
+        ctx.drawImage(this,x,y);
+
+        if(myCard.selected) {
+            var sel = document.createElement('img');
+            sel.onload = function() {
+                ctx.drawImage(this,x,y);
+            };
+            sel.id = "sel";
+            sel.src = "cards/select.png";
+        }
+    };
     img.id = name;
     img.src = "cards/new/"+name;
 
-    ctx.drawImage(img, x, y);
-    console.log("Card drawn: "+name);
 }
