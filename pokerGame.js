@@ -29,6 +29,9 @@ function newGame() {
 	turnInProgress = false;
         hand=[];
         render();
+
+	// enable draw button
+	document.getElementById("draw").disabled = false;
 }
 
 function nextTurn() {
@@ -41,6 +44,7 @@ function nextTurn() {
 		hand.push(deck[i]);
 	}
 
+	// take bet
 	credits -= bet;
 	updateDebug();
 }
@@ -60,6 +64,7 @@ function doTurn() {
 	discards.sort();
 	discards.reverse();
 
+	// remove them from hand
 	for (var i = 0; i < discards.length; i++) {
 		hand.remove(discards[i]);
 	}
@@ -69,7 +74,18 @@ function doTurn() {
 		hand.push(deck[i+5]);
 	}
 */
+
+	// check hand and payout
 	checkWin();
+
+	// game over if out of credits
+	if (credits <= 0) {
+		// disable draw button
+		document.getElementById("draw").disabled = true;
+
+		// display game over
+		alert("Game Over.");
+	}
 	updateDebug();
 
         render();
@@ -93,13 +109,16 @@ function updateDebug() {
 
 // draw button clicked, advance turn
 function draw() {
-	if(turnInProgress) {
-		doTurn();
-	} else {
-		nextTurn();
-	}
-
-	turnInProgress = !turnInProgress;
+	if (credits >= 0) {
+		if(turnInProgress) {
+			doTurn();
+		} else if (credits > 0) {
+			// make sure user cant bet more than the have
+			if (bet > credits) { bet = 1; }
+			nextTurn();
+		}
+		turnInProgress = !turnInProgress;
+        }
         render();
 }
 
