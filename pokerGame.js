@@ -7,7 +7,7 @@ var turnInProgress = false;
 
 function pageLoad() {
 	// set up canvas
-        render();
+    render();
 
 	// link new game button to new game function
 	document.getElementById("newGame").onclick = newGame;
@@ -36,8 +36,8 @@ function nextTurn() {
 	for (var i = 0; i < 5; i++) {
 		hand.push(deck[i]);
 	}
-	updateDisplay();
-        render();
+	updateDebug();
+    render();
 }
 
 function doTurn() {
@@ -54,8 +54,8 @@ function doTurn() {
 	for (var i = 0; i < discards.length; i++) {
 		hand.push(deck[i+5]);
 	}
-	payout(checkWin());
-	updateDisplay();
+	checkWin();
+	updateDebug();
 }
 
 function setBet() {
@@ -64,14 +64,15 @@ function setBet() {
 	}
 }
 
-function updateDisplay() {
-	// update win, bet, credits
+// debugging purposes only
+function updateDebug() {
 	for (var i = 0; i < hand.length; i++) {
 		console.log(hand[i].value + " of " + hand[i].suite);
 	}
 	console.log("");
 }
 
+// draw button clicked, advance turn
 function draw() {
 	if(turnInProgress) {
 		doTurn();
@@ -94,13 +95,107 @@ function checkWin() {
 		STRAIGHT : 6,
 		THREEOFAKIND : 7,
 		TWOPAIR : 8,
-		JACKSORBETTER : 9
+		JACKSORBETTER : 9,
+		NOWIN : 10
 	};
 
-	var suites = { hearts : 0, spades : 0, diamonds : 0, clubs : 0 };
+	var handResult = WinningHand.NOWIN;
+	var flush = false;
+	var straight = false;
+	var pairsFound = 0;
+	var threeOfaKind = false;
+	var jacksOrBetter = false;
 
-	for (var i in hand) {
+	var suites = { 'Hearts' : 0, 'Spades' : 0, 'Diamonds' : 0, 'Clubs' : 0 };
+	var cardValues = {  '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0,
+						'7' : 0, '8' : 0, '9' : 0, 'J' : 0, 'Q' : 0, 
+						'K' : 0, 'A' : 0 };
 
+	// count occurances of each card value and suite
+	for (var i = 0; i < hand.length; i++) {
+		suites[hand[i].suite] += 1;
+		cardValues[hand[i].value] += 1;
+	}
+
+	// royal flush, straight, stright flush, flush
+	for (var i in suites) {
+		// find flush
+		if (suites[i] == 5) {
+			flush = true;
+		}
+	}
+
+	var count = 0;
+	for (var i in cardValues) {
+		// find straight
+		if (cardValues[i] == 1) {
+			count++;
+		} else {
+			count = 0;
+		}
+
+		if (count == 5) {
+			straight = true;
+		}
+	}
+
+	if (flush && straight && cardValues['A'] == 1) {
+		// royal flush
+		handResult = WinningHand.ROYALFLUSH;
+	} else if (flush && straight) {
+		// straight flush
+		handResult = WinningHand.STRAIGHTFLUSH;
+	} else if (flush) {
+		// flush
+		handResult = WinningHand.FLUSH;
+	} else if (straight) {
+		// straight
+		handResult = WinningHand.STRAIGHT;
+	}
+
+	// pairs, threes, fours, full house
+	for (var i in cardValues) {
+		if (cardValues[i] == 4) {
+			if (i == 'A') {
+				// four aces
+				handResult = WinningHand.FOURACES;
+			} else {
+				// four of a kind
+				handResult = WinningHand.FOUROFAKIND;
+			}
+		} else if (cardValues[i] == 3) {
+			if (pairsFound == 1) {
+				// full house
+				handResult = WinningHand.FULLHOUSE;
+			} else {
+				// three of a kind
+				handResult = WinningHand.THREEOFAKIND;
+			}
+		} else if (cardValues[i] == 2) {
+			if (threeOfaKind) {
+				// full house
+				handResult = WinningHand.FULLHOUSE;
+			} else {
+				// pair
+				pairsFound += 1;
+				if (i == 'J' || i == 'Q' || i == 'K' || i == 'A') {
+					jacksOrBetter = true;
+				}
+			}
+		}
+	}
+
+	// pairs
+	if (pairsFound > 1) {
+		handResult = WinningHand.TWOPAIR;
+	} else if (pairsFound == 1 && jacksOrBetter) {
+		handResult = WinningHand.JACKSORBETTER;
+	}
+
+	// payout
+	console.log(handResult);
+	if (handResult != WinningHand.NOWIN) {
+		payout(handResult);
 	}
 }
 
@@ -108,7 +203,7 @@ function payout(index) {
 	// payout according to hand
 	var payouts = [250, 150, 100, 50, 10, 5, 4, 3, 2, 1];
 
-	return bet * payouts[index];
+	credits += bet * payouts[index];
 }
 
 function Card(suite, value) {
