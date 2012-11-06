@@ -4,6 +4,8 @@ var hand = [];
 var bet = "--";
 var credits = "------";
 var turnInProgress = false;
+var handResult = "----------";
+var payout = "------";
 
 function pageLoad() {
 	// set up canvas
@@ -24,56 +26,43 @@ function newGame() {
 	// initiate new game
 	createDeck();
 	deck.shuffle();
+	hand = [];
 	credits = 200;
 	bet = 1;
 	turnInProgress = false;
-        hand=[];
-        render();
+	handResult = "----------";
+	payout = "------";
+	render();
 
 	// enable draw button
 	document.getElementById("draw").disabled = false;
 }
 
 function nextTurn() {
-	deck.shuffle();
-
 	// draw new cards
+	deck.shuffle();
 	hand = [];
 	for (var i = 0; i < 5; i++) {
-                deck[i].selected = false;
+		deck[i].selected = false;
 		hand.push(deck[i]);
 	}
 
-	// take bet
+	// take bet and reset 
 	credits -= bet;
-	updateDebug();
+	handResult = "----------";
+	payout = "------";
 }
 
 function doTurn() {
 	// get cards to discard/hold
-//	var discards = [];
-        var count = 0;
+	var count = 0;
 
-        for(var i = 0; i < hand.length; i++) {
-            if(hand[i].selected) {
-                hand[i].selected=false;
-                hand[i]=deck[i+5];
-            }
-        }
-/*
-	discards.sort();
-	discards.reverse();
-
-	// remove them from hand
-	for (var i = 0; i < discards.length; i++) {
-		hand.remove(discards[i]);
+	for(var i = 0; i < hand.length; i++) {
+		if(hand[i].selected) {
+			hand[i].selected = false;
+			hand[i] = deck[i + 5];
+		}
 	}
-
-	// draw new cards
-	for (var i = 0; i < count; i++) {
-		hand.push(deck[i+5]);
-	}
-*/
 
 	// check hand and payout
 	checkWin();
@@ -86,25 +75,14 @@ function doTurn() {
 		// display game over
 		alert("Game Over.");
 	}
-	updateDebug();
-
-        render();
+	render();
 }
 
 function setBet() {
 	if (!turnInProgress) {
 		bet = this.id;
 	}
-
-        render();
-}
-
-// debugging purposes only
-function updateDebug() {
-	for (var i = 0; i < hand.length; i++) {
-		console.log(hand[i].value + " of " + hand[i].suite);
-	}
-	console.log("");
+	render();
 }
 
 // draw button clicked, advance turn
@@ -118,27 +96,17 @@ function draw() {
 			nextTurn();
 		}
 		turnInProgress = !turnInProgress;
-        }
-        render();
+	}
+	render();
 }
 
 function checkWin() {
 	// check if winning hand
-	var WinningHand = {
-		ROYALFLUSH : 0,
-		STRAIGHTFLUSH : 1,
-		FOURACES : 2,
-		FOUROFAKIND : 3,
-		FULLHOUSE : 4,
-		FLUSH : 5,
-		STRAIGHT : 6,
-		THREEOFAKIND : 7,
-		TWOPAIR : 8,
-		JACKSORBETTER : 9,
-		NOWIN : 10
-	};
+	var possibleHands = ["Royal Flush", "Straight Flush", "Four Aces", 
+		"Four Of A Kind", "Full House", "Flush", "Straight", "Three Of A Kind", 
+		"Two Pair", "Jacks Or Better", "No Win"];
 
-	var handResult = WinningHand.NOWIN;
+	var index = 10;
 	var flush = false;
 	var straight = false;
 	var pairsFound = 0;
@@ -180,16 +148,16 @@ function checkWin() {
 
 	if (flush && straight && cardValues['A'] == 1) {
 		// royal flush
-		handResult = WinningHand.ROYALFLUSH;
+		index = 0;
 	} else if (flush && straight) {
 		// straight flush
-		handResult = WinningHand.STRAIGHTFLUSH;
+		index = 1;
 	} else if (flush) {
 		// flush
-		handResult = WinningHand.FLUSH;
+		index = 5;
 	} else if (straight) {
 		// straight
-		handResult = WinningHand.STRAIGHT;
+		index = 6;
 	}
 
 	// pairs, threes, fours, full house
@@ -197,23 +165,23 @@ function checkWin() {
 		if (cardValues[i] == 4) {
 			if (i == 'A') {
 				// four aces
-				handResult = WinningHand.FOURACES;
+				index = 2;
 			} else {
 				// four of a kind
-				handResult = WinningHand.FOUROFAKIND;
+				index = 3;
 			}
 		} else if (cardValues[i] == 3) {
 			if (pairsFound == 1) {
 				// full house
-				handResult = WinningHand.FULLHOUSE;
+				index = 4;
 			} else {
 				// three of a kind
-				handResult = WinningHand.THREEOFAKIND;
+				index = 7;
 			}
 		} else if (cardValues[i] == 2) {
 			if (threeOfaKind) {
 				// full house
-				handResult = WinningHand.FULLHOUSE;
+				index = 4;
 			} else {
 				// pair
 				pairsFound += 1;
@@ -226,30 +194,30 @@ function checkWin() {
 
 	// pairs
 	if (pairsFound > 1) {
-		handResult = WinningHand.TWOPAIR;
+		index = 8;
 	} else if (pairsFound == 1 && jacksOrBetter) {
-		handResult = WinningHand.JACKSORBETTER;
+		index = 9;
 	}
 
+	// set result of hand to display
+	handResult = possibleHands[index];
 	// payout
-	console.log(handResult);
-	payout(handResult);
+	pay(index);
 }
 
-function payout(index) {
+function pay(index) {
 	// payout according to hand
 	var payouts = [250, 150, 100, 50, 10, 5, 4, 3, 2, 1, 0];
 
-	credits += bet * payouts[index];
-	console.log(credits);
-	console.log(payouts[index]);
+	payout = bet * payouts[index];
+	credits += payout;
 }
 
 function Card(suite, value) {
 	// card class
 	this.suite = suite;
 	this.value = value;
-        this.selected = false;
+	this.selected = false;
 }
 
 function createDeck() {
@@ -270,21 +238,14 @@ function createDeck() {
 // credit: http://stackoverflow.com/questions/2450954/how-to-randomize-a-javascript-array
 // and http://sedition.com/perl/javascript-fy.html
 Array.prototype.shuffle = function() {
-  var i = this.length, j, tempi, tempj;
-  if ( i == 0 ) return false;
-  while ( --i ) {
-     j       = Math.floor( Math.random() * ( i + 1 ) );
-     tempi   = this[i];
-     tempj   = this[j];
-     this[i] = tempj;
-     this[j] = tempi;
-  }
-  return this;
+	var i = this.length, j, tempi, tempj;
+	if ( i == 0 ) return false;
+	while ( --i ) {
+		j       = Math.floor( Math.random() * ( i + 1 ) );
+		tempi   = this[i];
+		tempj   = this[j];
+		this[i] = tempj;
+		this[j] = tempi;
+	}
+	return this;
 }
-
-// credit: http://ejohn.org/blog/javascript-array-remove/
-Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
-};
