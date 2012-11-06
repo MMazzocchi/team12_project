@@ -25,8 +25,8 @@ body {
 #gameCanvas {
 	border: 2px solid #888888;
 	border-radius:40px;
-        margin-left: auto;
-        margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 	background-color:#FF3333;
 	margin-top:1em;
 	margin-bottom:0.5em;
@@ -112,9 +112,9 @@ footer {
 }
 
 button {
-	width:196px;
+	width:150px;
 	height:34px;
-        display: inline;
+	display: inline;
 }
 
 a:visited {

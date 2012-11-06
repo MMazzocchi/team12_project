@@ -54,13 +54,12 @@ function nextTurn() {
 }
 
 function doTurn() {
-	// get cards to discard/hold
-	var count = 0;
-
+	// discard cards not selected
 	for(var i = 0; i < hand.length; i++) {
-		if(hand[i].selected) {
-			hand[i].selected = false;
+		if(!hand[i].selected) {
 			hand[i] = deck[i + 5];
+		} else {
+			hand[i].selected = false;
 		}
 	}
 
@@ -75,6 +74,11 @@ function doTurn() {
 		// display game over
 		alert("Game Over.");
 	}
+	render();
+}
+
+function setSelected(index) {
+	hand[index].selected = !hand[index].selected;
 	render();
 }
 
